@@ -6,13 +6,15 @@ const todos = [
 	{ id: 3, text: 'todo three' },
 ];
 const server = http.createServer((req, res) => {
-	res.setHeader('Content-Type', 'application/json');
-	res.setHeader('X-Powered-By', 'Node.JS');
-
+	res.writeHead(404, {
+		'Content-Type': 'application/json',
+		'X-Powered-By': 'Node.JS',
+	});
 	res.end(
 		JSON.stringify({
-			success: true,
-			data: todos,
+			success: false,
+			errror: 'Page Not Found',
+			data: null,
 		})
 	);
 });
