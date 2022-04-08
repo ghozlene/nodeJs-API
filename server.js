@@ -6,17 +6,26 @@ const todos = [
 	{ id: 3, text: 'todo three' },
 ];
 const server = http.createServer((req, res) => {
-	res.writeHead(404, {
+	res.writeHead(200, {
 		'Content-Type': 'application/json',
 		'X-Powered-By': 'Node.JS',
 	});
+	let body = [];
+	req
+		.on('data', (chunk) => {
+			body.push(chunk);
+		})
+		.on('end', () => {
+			body = Buffer.concat(body).toString();
+			console.log(body);
+		});
 	res.end(
 		JSON.stringify({
-			success: false,
-			errror: 'Page Not Found',
-			data: null,
+			success: true,
+			data: todos,
 		})
 	);
+	console.log(req.headers.authorization);
 });
 
 const PORT = 5000;
