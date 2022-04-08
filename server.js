@@ -1,7 +1,8 @@
 const http = require('http');
 
 const server = http.createServer((req, res) => {
-	console.log(req.method);
+	const { headers, url, method } = req;
+	console.log(headers, url, method);
 	res.end();
 });
 
