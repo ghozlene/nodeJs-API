@@ -2,9 +2,11 @@
 //@Route: GET /api/v1/bootcamps
 //Access : Public
 exports.getBootcamps = (req, res, next) => {
+	console.log(`${req.hello} from GetBootcamps`);
 	res.status(200).json({
 		success: true,
 		msg: 'Show all bootcamps',
+		hello: req.hello,
 	});
 };
 
