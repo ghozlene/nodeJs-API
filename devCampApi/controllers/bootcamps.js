@@ -3,23 +3,44 @@ const Bootcamp = require('../models/Bootcamp');
 //@Description : GET all the bootcamps
 //@Route: GET /api/v1/bootcamps
 //Access : Public
-exports.getBootcamps = (req, res, next) => {
-	console.log(`${req.hello} from GetBootcamps`);
-	res.status(200).json({
-		success: true,
-		msg: 'Show all bootcamps',
-		hello: req.hello,
-	});
+exports.getBootcamps = async (req, res, next) => {
+	try {
+		const bootcamps = await Bootcamp.find();
+		res.status(200).json({
+			success: true,
+			data: bootcamps,
+		});
+	} catch (error) {
+		res.status(400).json({
+			success: false,
+			data: { msg: 'bad request you can check your url' },
+		});
+	}
 };
 
 //@Description : GET Single  bootcamp
 //@Route: GET /api/v1/bootcamps/:id
 //@Access : Public
-exports.getBootcamp = (req, res, next) => {
-	res.status(200).json({
-		success: true,
-		msg: `Show one bootcamp ${req.params.id}`,
-	});
+exports.getBootcamp = async (req, res, next) => {
+	try {
+		const bootcamp = await Bootcamp.findById(req.params.id);
+
+		if (!bootcamp) {
+			return res.status(400).json({
+				success: false,
+				data: { msg: 'Id is not define in your DB check your id on the URL' },
+			});
+		}
+		res.status(200).json({
+			success: true,
+			data: bootcamp,
+		});
+	} catch (error) {
+		res.status(400).json({
+			success: false,
+			data: { msg: 'bad request you can check your request again' },
+		});
+	}
 };
 
 //@Description : POST Single  bootcamp
