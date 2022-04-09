@@ -1,11 +1,21 @@
 const colors = require('colors');
+const ErrorResponse = require('../utils/ErrorResponse');
 
 const errorHandler = (err, req, res, next) => {
+	let error = { ...err };
+
+	error.message = err.message;
 	//log to console for dev
 	console.log(`${err.stack}`.red);
-	res.status(err.statusCode || 500).json({
+
+	//for bad objectId
+	if (err.name === 'CastError') {
+		const messsage = `The Resource is not found verify the id ${err.value}`;
+		error = new ErrorResponse(messsage, 404);
+	}
+	res.status(error.statusCode || 500).json({
 		success: false,
-		error: err.message || 'server error',
+		error: error.message || 'server error',
 	});
 };
 

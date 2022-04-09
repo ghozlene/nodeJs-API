@@ -12,10 +12,7 @@ exports.getBootcamps = async (req, res, next) => {
 			data: bootcamps,
 		});
 	} catch (error) {
-		res.status(400).json({
-			success: false,
-			data: { msg: 'bad request you can check your url' },
-		});
+		next(error);
 	}
 };
 
@@ -41,12 +38,7 @@ exports.getBootcamp = async (req, res, next) => {
 		// 	success: false,
 		// 	data: { msg: 'bad request you can check your request again' },
 		// });
-		next(
-			new ErrorResponse(
-				`The bootcamp is not found verify the id ${req.params.id}`,
-				404
-			)
-		);
+		next(error);
 	}
 };
 
@@ -61,12 +53,7 @@ exports.createBootcamp = async (req, res, next) => {
 			data: bootcamp,
 		});
 	} catch (error) {
-		res.status(400).json({
-			success: false,
-			data: {
-				msg: 'bad request you just want to add the same piece with the same info',
-			},
-		});
+		next(error);
 	}
 };
 
@@ -80,20 +67,17 @@ exports.updateBootcamp = async (req, res, next) => {
 			runValidators: true,
 		});
 		if (!bootcamp) {
-			return res.status(400).json({
-				success: false,
-				data: { msg: 'Bad request ,something goes worng' },
-			});
+			return new ErrorResponse(
+				`The bootcamp is not found verify the id ${req.params.id}`,
+				404
+			);
 		}
 		res.status(200).json({
 			success: true,
 			data: bootcamp,
 		});
 	} catch (error) {
-		res.status(400).json({
-			success: false,
-			msg: 'something goes wrong',
-		});
+		next(error);
 	}
 };
 
@@ -104,10 +88,10 @@ exports.deleteBootcamp = async (req, res, next) => {
 	try {
 		const bootcamp = await Bootcamp.findByIdAndRemove(req.params.id);
 		if (!bootcamp) {
-			return res.status(400).json({
-				success: false,
-				data: { msg: 'Bad request ,something goes worng' },
-			});
+			return new ErrorResponse(
+				`The bootcamp is not found verify the id ${req.params.id}`,
+				404
+			);
 		}
 		res.status(200).json({
 			success: true,
@@ -115,9 +99,6 @@ exports.deleteBootcamp = async (req, res, next) => {
 			msg: 'the item is deleting with success',
 		});
 	} catch (error) {
-		res.status(400).json({
-			success: false,
-			msg: 'something goes wrong',
-		});
+		next(error);
 	}
 };
