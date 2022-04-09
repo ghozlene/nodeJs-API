@@ -1,5 +1,21 @@
 const http = require('http');
 
+const Sentry = require('@sentry/node');
+const Tracing = require('@sentry/tracing');
+
+Sentry.init({
+	dsn: 'https://3bd2dcfc1a584210966ee5c0e27d3f9f@o1197183.ingest.sentry.io/6319991',
+
+	// Set tracesSampleRate to 1.0 to capture 100%
+	// of transactions for performance monitoring.
+	// We recommend adjusting this value in production
+	tracesSampleRate: 1.0,
+});
+const transaction = Sentry.startTransaction({
+	op: 'test',
+	name: 'My First Test Transaction',
+});
+
 const todos = [
 	{ id: 1, text: 'todo one' },
 	{ id: 2, text: 'todo two' },
@@ -48,6 +64,14 @@ const server = http.createServer((req, res) => {
 			res.end(JSON.stringify(response));
 		});
 });
-
+setTimeout(() => {
+	try {
+		foo();
+	} catch (e) {
+		Sentry.captureException(e);
+	} finally {
+		transaction.finish();
+	}
+}, 99);
 const PORT = 5000;
 server.listen(PORT, () => console.log(`Server listen on port ${PORT}`));
