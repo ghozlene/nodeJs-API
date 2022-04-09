@@ -16,6 +16,8 @@ connectDB();
 
 const app = express();
 
+app.use(express.json());
+
 //this is a custom logger create by me
 app.use(logger);
 
