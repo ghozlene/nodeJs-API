@@ -1,5 +1,5 @@
 const Bootcamp = require('../models/Bootcamp');
-
+const ErrorResponse = require('../utils/ErrorResponse');
 //@Description : GET all the bootcamps
 //@Route: GET /api/v1/bootcamps
 //Access : Public
@@ -27,10 +27,10 @@ exports.getBootcamp = async (req, res, next) => {
 		const bootcamp = await Bootcamp.findById(req.params.id);
 
 		if (!bootcamp) {
-			return res.status(400).json({
-				success: false,
-				data: { msg: 'Id is not define in your DB check your id on the URL' },
-			});
+			return new ErrorResponse(
+				`The bootcamp is not found verify the id ${req.params.id}`,
+				404
+			);
 		}
 		res.status(200).json({
 			success: true,
@@ -41,7 +41,12 @@ exports.getBootcamp = async (req, res, next) => {
 		// 	success: false,
 		// 	data: { msg: 'bad request you can check your request again' },
 		// });
-		next(error);
+		next(
+			new ErrorResponse(
+				`The bootcamp is not found verify the id ${req.params.id}`,
+				404
+			)
+		);
 	}
 };
 
