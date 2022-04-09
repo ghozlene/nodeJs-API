@@ -20,6 +20,8 @@
 	},
 	"homepage": "https://github.com/ghozlene/nodeJs-API#readme",
 	"dependencies": {
+		"@sentry/node": "^6.19.6",
+		"@sentry/tracing": "^6.19.6",
 		"colors": "^1.4.0",
 		"dotenv": "^16.0.0",
 		"express": "^4.17.3",
