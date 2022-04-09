@@ -37,10 +37,11 @@ exports.getBootcamp = async (req, res, next) => {
 			data: bootcamp,
 		});
 	} catch (error) {
-		res.status(400).json({
-			success: false,
-			data: { msg: 'bad request you can check your request again' },
-		});
+		// res.status(400).json({
+		// 	success: false,
+		// 	data: { msg: 'bad request you can check your request again' },
+		// });
+		next(error);
 	}
 };
 
