@@ -1,6 +1,11 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const path = require('path');
+//Loads .env file contents into process.env.
+dotenv.config({
+	path: path.resolve(__dirname, './config.env'),
+});
+
 const bootcamps = require('./routes/bootcamps');
 const morgan = require('morgan');
 const connectDB = require('./config/db');
@@ -9,11 +14,6 @@ const colors = require('colors');
 //for middleware
 const logger = require('./middleware/logger');
 const errorHandler = require('./middleware/error');
-
-//Loads .env file contents into process.env.
-dotenv.config({
-	path: path.resolve(__dirname, './config/config.env'),
-});
 
 connectDB();
 
@@ -29,8 +29,8 @@ if (process.env.NODE_ENV === 'development') {
 	app.use(morgan('dev'));
 }
 
-app.use('/api/v1/bootcamps', bootcamps, errorHandler);
-
+app.use('/api/v1/bootcamps', bootcamps);
+app.use(errorHandler);
 PORT = process.env.PORT;
 
 const server = app.listen(
