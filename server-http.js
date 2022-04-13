@@ -1,10 +1,19 @@
 const http = require('http');
+const path = require('path');
+const dotenv = require('dotenv');
+
+//Loads .env file contents into process.env.
+
+dotenv.config({
+	path: path.join(__dirname, './devCampApi', '/config.env'),
+});
 
 const Sentry = require('@sentry/node');
 const Tracing = require('@sentry/tracing');
 
+console.log(process.env.SENTRY_KEY);
 Sentry.init({
-	dsn: 'https://3bd2dcfc1a584210966ee5c0e27d3f9f@o1197183.ingest.sentry.io/6319991',
+	dsn: `https://${process.env.SENTRY_KEY}@o1197183.ingest.sentry.io/6319991`,
 
 	// Set tracesSampleRate to 1.0 to capture 100%
 	// of transactions for performance monitoring.
