@@ -79,15 +79,8 @@ exports.addCourse = asyncHandler(async (req, res, next) => {
 //@Route: PUT /api/v1/courses/:id
 //@Access : Private
 exports.updateCourse = asyncHandler(async (req, res, next) => {
-	const courseUpdated = await Course.findByIdAndUpdate(
-		req.params.id,
-		req.body,
-		{
-			new: true,
-			runValidators: true,
-		}
-	);
-	if (!courseUpdated) {
+	let course = await Course.findById(req.params.id);
+	if (!course) {
 		next(
 			new ErrorResponse(
 				`The course is not found verify the id ${req.params.id}`,
@@ -95,8 +88,36 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
 			)
 		);
 	}
+
+	course = await Course.findByIdAndUpdate(req.params.id, req.body, {
+		new: true,
+		runValidators: true,
+	});
+	console.log(`course Has been Updated with success`.bgMagenta);
 	res.status(200).json({
 		success: true,
-		data: courseUpdated,
+		data: course,
+	});
+});
+
+//@Description : delete Single course
+//@Route: DELETE /api/v1/courses/:id
+//@Access : Private
+exports.deleteCourse = asyncHandler(async (req, res, next) => {
+	const course = await Course.findById(req.params.id);
+	if (!course) {
+		next(
+			new ErrorResponse(
+				`The course is not found verify the id ${req.params.id}`,
+				404
+			)
+		);
+	}
+
+	await course.remove();
+	console.log(`course Has been removed with success`.bgRed);
+	res.status(200).json({
+		success: true,
+		data: {},
 	});
 });
