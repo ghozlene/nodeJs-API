@@ -37,4 +37,13 @@ userSchema.methods.getSignedJwtToken = function () {
 	return jwt.sign({ id: this._id }, process.env.JWT_SECRET);
 };
 
+//check if the password entred equale to the hash password stored in BD
+userSchema.methods.matchPassword = async function (entredPassword) {
+	return await bcrypt.compare(entredPassword, this.password);
+};
+
+userSchema.methods.getSignedJwtToken = function () {
+	return jwt.sign({ id: this._id }, process.env.JWT_SECRET);
+};
+
 module.exports = mongoose.model('User', userSchema);
