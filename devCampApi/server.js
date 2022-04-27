@@ -1,4 +1,5 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const path = require('path');
 //Loads .env file contents into process.env.
@@ -23,6 +24,9 @@ connectDB();
 const app = express();
 
 app.use(express.json());
+
+//Cookie parser
+app.use(cookieParser());
 
 //this is a custom logger create by me
 app.use(logger);
