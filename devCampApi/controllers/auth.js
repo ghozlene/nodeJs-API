@@ -26,7 +26,7 @@ exports.register = asyncHandler(async (req, res, next) => {
 	});
 });
 
-//@Description : Register User
+//@Description : Login User
 //@Route: POST /api/v1/auth/login
 //Access : Public
 
@@ -82,3 +82,15 @@ const sendTokenResponse = (user, statusCode, res) => {
 		token,
 	});
 };
+
+//@Description : Get the current User
+//@Route: GET /auth/me
+//Access : Public
+
+exports.getMe = asyncHandler(async (req, res, next) => {
+	const user = await User.findById(req.user.id);
+	res.status(200).json({
+		success: true,
+		data: user,
+	});
+});
