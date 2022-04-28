@@ -85,10 +85,36 @@ const sendTokenResponse = (user, statusCode, res) => {
 
 //@Description : Get the current User
 //@Route: GET /auth/me
-//Access : Public
+//Access : private
 
 exports.getMe = asyncHandler(async (req, res, next) => {
 	const user = await User.findById(req.user.id);
+	res.status(200).json({
+		success: true,
+		data: user,
+	});
+});
+
+//@Description : Forgot password
+//@Route: POST /auth/forgotpassword
+//Access : Public
+
+exports.forgotpassword = asyncHandler(async (req, res, next) => {
+	const user = await User.findOne({ email: req.body.email });
+
+	if (!user) {
+		return next(
+			new ErrorResponse(
+				`there is no user with the email :${req.body.email}`,
+				404
+			)
+		);
+	}
+
+	//getting the reset token
+	const resetToken = user.getResetPasswordToken();
+	console.log(resetToken);
+	await user.save({ validateBeforesave: false });
 	res.status(200).json({
 		success: true,
 		data: user,
