@@ -9,13 +9,13 @@ const {
 	getBootcampsInRadius,
 } = require('../controllers/bootcamps');
 
-const advancedResults = require('../middleware/advancedResults');
 const Bootcamp = require('../models/Bootcamp');
 
 //include other resource routers
 const courseRouter = require('./courses');
 
 const router = express.Router();
+const advancedResults = require('../middleware/advancedResults');
 const { protect, authorize } = require('../middleware/auth');
 
 //Re-routing to the resource routers(courseRouter)
