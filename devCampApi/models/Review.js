@@ -27,4 +27,8 @@ const ReviewSchema = new mongoose.Schema({
 		required: true,
 	},
 });
+
+//Preventing user from submiting more then one review per bootcamp
+ReviewSchema.index({ bootcamp: 1, user: 1 }, { unique: true });
+
 module.exports = mongoose.model('Review', ReviewSchema);
