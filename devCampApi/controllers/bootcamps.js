@@ -36,7 +36,7 @@ exports.getBootcamp = asyncHandler(async (req, res, next) => {
 exports.createBootcamp = asyncHandler(async (req, res, next) => {
 	//Adding user to request body
 	req.body.user = req.user.id;
-	const bootcamp = await Bootcamp.create(req.body);
+
 	//Check for published bootcamp
 	const publishedBootcamp = await Bootcamp.findOne({ user: req.user.id });
 
@@ -47,12 +47,13 @@ exports.createBootcamp = asyncHandler(async (req, res, next) => {
 				400
 			)
 		);
+	} else {
+		const bootcamp = await Bootcamp.create(req.body);
+		res.status(201).json({
+			success: true,
+			data: bootcamp,
+		});
 	}
-
-	res.status(201).json({
-		success: true,
-		data: bootcamp,
-	});
 });
 
 //@Description : PUT Single  bootcamp
