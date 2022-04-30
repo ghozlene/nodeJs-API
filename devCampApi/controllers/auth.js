@@ -73,6 +73,9 @@ const sendTokenResponse = (user, statusCode, res) => {
 
 	const options = {
 		httpOnly: true,
+		expires: new Date(
+			Date.now() + process.env.JWT_COOKIE_EXPIRE * 10 * 24 * 60 * 60 * 1000
+		),
 	};
 
 	if (process.env.NODE_ENV === 'production') {
@@ -84,6 +87,22 @@ const sendTokenResponse = (user, statusCode, res) => {
 		token,
 	});
 };
+
+//@Description : LOGOUT User and cleaning the cookie
+//@Route:  GET /api/v1/auth/logout
+//Access : private
+
+exports.logout = asyncHandler(async (req, res, next) => {
+	res.cookie('token', 'none', {
+		expires: new Date(Date.now() + 10 * 1000),
+		httpOnly: true,
+	});
+
+	res.status(200).json({
+		success: true,
+		data: {},
+	});
+});
 
 //@Description : Get the current User
 //@Route: GET /auth/me
