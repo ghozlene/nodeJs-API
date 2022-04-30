@@ -65,3 +65,62 @@ exports.addReview = asyncHandler(async (req, res, next) => {
 		data: review,
 	});
 });
+
+//@Description : UPDATE a review
+//@Route: PUT /api/v1/reviews/:id
+//Access : Private
+exports.updateReview = asyncHandler(async (req, res, next) => {
+	let review = await Review.findById(req.params.id);
+
+	if (!review) {
+		return next(
+			new ErrorResponse(`the review with id :${req.params.id} not found`),
+			404
+		);
+	}
+
+	//Verifing that the review belong to a user or a user mode admin
+	if (review.user.toString() !== req.user.id && req.user.role !== 'admin') {
+		return next(
+			new ErrorResponse(`not authorized to making the update on the review`),
+			401
+		);
+	}
+
+	review = await Review.findByIdAndUpdate(req.params.id, req.body, {
+		new: true,
+		runValidators: true,
+	});
+	res.status(200).json({
+		success: true,
+		data: review,
+	});
+});
+
+//@Description : DELETE a review
+//@Route: DELETE /api/v1/reviews/:id
+//Access : Private
+exports.deleteReview = asyncHandler(async (req, res, next) => {
+	const review = await Review.findById(req.params.id);
+
+	if (!review) {
+		return next(
+			new ErrorResponse(`the review with id :${req.params.id} not found`),
+			404
+		);
+	}
+
+	//Verifing that the review belong to a user or a user mode admin
+	if (review.user.toString() !== req.user.id && req.user.role !== 'admin') {
+		return next(
+			new ErrorResponse(`not authorized to making the delete on the review`),
+			401
+		);
+	}
+
+	await review.deleteOne({ id: req.params.id });
+	res.status(200).json({
+		success: true,
+		data: {},
+	});
+});
