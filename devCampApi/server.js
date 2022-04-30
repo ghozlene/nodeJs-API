@@ -3,6 +3,10 @@ const cookieParser = require('cookie-parser');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
 const xss = require('xss-clean');
+const rateLimit = require('express-rate-limit');
+const hpp = require('hpp');
+const cors = require('cors');
+
 const dotenv = require('dotenv');
 const path = require('path');
 //Loads .env file contents into process.env.
@@ -57,6 +61,21 @@ app.use(helmet());
 
 //set cross sites scripting:
 app.use(xss());
+
+//initialize the rate limit :
+const limiter = rateLimit({
+	windowMs: 5 * 60 * 1000,
+	max: 20,
+	standardHeaders: true,
+});
+// Apply the rate limiting middleware to all requests
+app.use(limiter);
+
+//preventing HTTP params pollution
+app.use(hpp());
+
+//Enable cross origin resource sharing
+app.use(cors());
 
 //Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
