@@ -1,5 +1,6 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const mongoSanitize = require('express-mongo-sanitize');
 const dotenv = require('dotenv');
 const path = require('path');
 //Loads .env file contents into process.env.
@@ -40,6 +41,14 @@ if (process.env.NODE_ENV === 'development') {
 
 //file uploading
 app.use(fileupload());
+
+//  sanitize data that only contains $, without .(dot)
+// Can be useful for letting data pass that is meant for querying nested documents.
+app.use(
+	mongoSanitize({
+		allowDots: true,
+	})
+);
 
 //Set static folder
 app.use(express.static(path.join(__dirname, 'public')));

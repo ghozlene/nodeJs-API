@@ -11,7 +11,7 @@ const errorHandler = (err, req, res, next) => {
 
 	//for bad objectId
 	if (err.name === 'CastError') {
-		const messsage = `The Resource is not found verify the id ${err.value}`;
+		const messsage = `The Resource is not found: (${err.name}: cast failed for value :('${err.stringValue}') for value type:('${err.valueType}') at path : ('${err.path})`;
 		error = new ErrorResponse(messsage, 404);
 	}
 	//Mongoose Duplicated Key
