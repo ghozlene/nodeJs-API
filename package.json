@@ -41,6 +41,7 @@
 		"nodemailer": "^6.7.4",
 		"nodemon": "^2.0.15",
 		"slugify": "^1.6.5",
+		"treblle": "^1.2.0",
 		"xss-clean": "^0.1.1"
 	}
 }

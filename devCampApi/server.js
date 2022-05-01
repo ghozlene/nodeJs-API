@@ -4,6 +4,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
 const xss = require('xss-clean');
 const rateLimit = require('express-rate-limit');
+const { useTreblle } = require('treblle');
 const hpp = require('hpp');
 const cors = require('cors');
 
@@ -68,6 +69,13 @@ const limiter = rateLimit({
 	max: 20,
 	standardHeaders: true,
 });
+//using trebelle to generate DOCs
+useTreblle(app, {
+	apiKey: process.env.TREBELLE_API_KEY,
+	projectId: process.env.TREBELLE_PROJECT_ID,
+	additionalFieldsToMask: ['secret', 'private', 'user_ssn'],
+});
+
 // Apply the rate limiting middleware to all requests
 app.use(limiter);
 
